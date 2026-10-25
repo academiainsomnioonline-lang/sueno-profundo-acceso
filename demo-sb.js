@@ -24,7 +24,8 @@ document.addEventListener('DOMContentLoaded',function(){ var b=document.createEl
       meta:[], asignaciones:[],
       portal_accesos:[{consulta_id:CID,paciente_id:'p1',email:'pac@x.com',activo:true,creado_en:add(today,-30),ultimo_acceso:add(today,-1)}],
       portal_items:[{id:'it1',consulta_id:CID,paciente_id:'p1',tipo:'consentimiento',titulo:'Consentimiento informado TCC-I',storage_path:'c1/p1/x.pdf',creado_en:add(today,-1)},
-                    {id:'it2',consulta_id:CID,paciente_id:'p1',tipo:'documento',titulo:'Guía de higiene',storage_path:'c1/p1/y.pdf',creado_en:add(today,-2)}],
+                    {id:'it2',consulta_id:CID,paciente_id:'p1',tipo:'documento',titulo:'Guía de higiene',storage_path:'c1/p1/y.pdf',creado_en:add(today,-2)},
+                    {id:'it3',consulta_id:CID,paciente_id:'p1',tipo:'evolucion',titulo:'Tu evolución',creado_en:add(today,-1),datos:{isi:[{fecha:add(today,-75),valor:21},{fecha:add(today,-40),valor:14},{fecha:add(today,-5),valor:7}],eficiencia:[{semana:add(today,-70),valor:56},{semana:add(today,-63),valor:68},{semana:add(today,-56),valor:74},{semana:add(today,-49),valor:79},{semana:add(today,-42),valor:83},{semana:add(today,-35),valor:81},{semana:add(today,-28),valor:86},{semana:add(today,-21),valor:84}],tarjetas:{isi:{ini:21,act:7},eficiencia:{ini:56,act:84,media:79}}}}],
       portal_envios:[],
       calendario_prof:[{user_id:'u_dir',consulta_id:CID,meet_url:'https://meet.google.com/aoi-fran-sala'}],
       citas:(function(){ const L=new Date(); L.setHours(0,0,0,0); L.setDate(L.getDate()-((L.getDay()+6)%7)); const at=(d,h,m)=>{ const x=new Date(L); x.setDate(x.getDate()+d); x.setHours(h,m||0,0,0); return x.toISOString(); };
@@ -124,6 +125,7 @@ document.addEventListener('DOMContentLoaded',function(){ var b=document.createEl
     portal_mi_foto_guardar({p_data}){ const yo=RPC.portal_yo(); DB.fotos=(DB.fotos||[]).filter(x=>!(x.tipo==='pac'&&x.ref===yo.paciente_id)); if(p_data) DB.fotos.push({consulta_id:CID,tipo:'pac',ref:yo.paciente_id,data:p_data}); save(); return true; },
     portal_fotos_equipo(){ return (DB.fotos||[]).filter(f=>f.tipo==='prof').map(f=>{ const m=DB.miembros.find(x=>x.user_id===f.ref); return {nombre:m?m.nombre_profesional:'', data:f.data}; }); },
     portal_programa(){ const yo=RPC.portal_yo(); if(!yo) return null; const p=DB.programas.find(x=>x.paciente_id===yo.paciente_id); if(!p) return {definido:false}; const d=new Date(p.fin+'T12:00:00'); d.setMonth(d.getMonth()+6); return {definido:true,inicio:p.inicio,fin:p.fin,meses:p.meses,ampliaciones:p.tramos.length,hoy:today,estado:today>p.fin?'terminado':'activo',acceso_hasta:d.toISOString().slice(0,10),renovacion_solicitada:p.renovacion_solicitada}; },
+    portal_mi_horario(){ return window.__HZ||{base:{acostarse:'23:00',levantarse:'07:00'},variantes:[{titulo:'Fin de semana',levantarse:'08:00'}],fecha:add(today,-5)}; },
     portal_solicitar_renovacion(){ const yo=RPC.portal_yo(); const p=DB.programas.find(x=>x.paciente_id===yo.paciente_id); if(!p.renovacion_solicitada) p.renovacion_solicitada=new Date().toISOString(); return {ok:true}; },
     portal_mis_sugerencias(){ const yo=RPC.portal_yo(); if(!yo) return null; const p=DB.programas.find(x=>x.paciente_id===yo.paciente_id); const mine=DB.sugerencias.filter(s=>s.paciente_id===yo.paciente_id); let toca=null;
       if(p){ const d30=add(p.inicio,30), f7=add(p.fin,-7), f60=add(p.fin,60);
