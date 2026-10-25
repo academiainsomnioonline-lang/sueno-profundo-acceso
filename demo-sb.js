@@ -31,6 +31,7 @@ document.addEventListener('DOMContentLoaded',function(){ var b=document.createEl
       citas:(function(){ const L=new Date(); L.setHours(0,0,0,0); L.setDate(L.getDate()-((L.getDay()+6)%7)); const at=(d,h,m)=>{ const x=new Date(L); x.setDate(x.getDate()+d); x.setHours(h,m||0,0,0); return x.toISOString(); };
         return [
           {id:'c1',consulta_id:CID,paciente_id:'p1',profesional_id:'u_dir',inicio:at(0,10),duracion_min:45,tipo:'Seguimiento',estado:'realizada',meet_url:'https://meet.google.com/aoi-fran-sala'},
+          {id:'c1b',consulta_id:CID,paciente_id:'p1',profesional_id:'u_dir',inicio:at(10,9,30),duracion_min:60,tipo:'Seguimiento',estado:'programada',meet_url:'https://meet.google.com/aoi-fran-sala'},
           {id:'c2',consulta_id:CID,paciente_id:'p2',profesional_id:'u_dir',inicio:at(1,17,30),duracion_min:60,tipo:'Valoración inicial',estado:'programada',meet_url:'https://meet.google.com/aoi-fran-sala'},
           {id:'c3',consulta_id:CID,paciente_id:'p1',profesional_id:'u_dir',inicio:at(3,12),duracion_min:45,tipo:'Revisión',estado:'programada',meet_url:'https://meet.google.com/aoi-fran-sala'},
           {id:'c4',consulta_id:CID,paciente_id:'p2',profesional_id:'u_psi',inicio:at(2,9,30),duracion_min:60,tipo:'Sesión de psicología',estado:'programada',meet_url:'https://meet.google.com/aoi-psi-sala'},
