@@ -10,9 +10,15 @@ jobs:
       - uses: actions/checkout@v4
       - name: Quitar la carpeta de GitHub del paquete
         run: rm -rf .github
-      - name: Publicar en Cloudflare Pages
-        uses: cloudflare/wrangler-action@v3
+      - uses: actions/setup-node@v4
         with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: 3ff20f4b17dccc4337be9e54ff2f04dd
-          command: pages deploy . --project-name=aoi-plataforma --branch=main --commit-dirty=true
+          node-version: 20
+      - name: Publicar en Cloudflare Pages
+        env:
+          LLAVE: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: 3ff20f4b17dccc4337be9e54ff2f04dd
+        run: |
+          # La llave a veces se pega con saltos de línea o texto alrededor: nos quedamos solo con la llave.
+          export CLOUDFLARE_API_TOKEN="$(printf '%s' "$LLAVE" | grep -oE '[A-Za-z0-9_-]{35,}' | head -n 1)"
+          if [ -z "$CLOUDFLARE_API_TOKEN" ]; then echo "No se encuentra la llave de Cloudflare en el secreto"; exit 1; fi
+          npx --yes wrangler@3 pages deploy . --project-name=aoi-plataforma --branch=main --commit-dirty=true
