@@ -1,5 +1,5 @@
 /* Vista de ejemplo del área del paciente (?demo=1). Todo es ficticio y se queda en este navegador: no toca la base de datos real. */
-window.__USER='u_pac'; window.__RESET=true;
+window.__USER=/gestor/.test(location.pathname)?'u_dir':'u_pac'; window.__RESET=true;
 document.addEventListener('DOMContentLoaded',function(){ var b=document.createElement('div'); b.textContent='Vista de ejemplo · datos ficticios, nada se guarda'; b.style.cssText='position:fixed;top:0;left:0;right:0;z-index:99999;background:#D4AF37;color:#2B2118;text-align:center;font:600 12px Inter,system-ui,sans-serif;padding:5px;'; document.body.appendChild(b); });
 // Fake supabase-js for local UI tests. State in localStorage('FAKE_DB') so it survives reloads.
 (function(){
@@ -153,7 +153,11 @@ document.addEventListener('DOMContentLoaded',function(){ var b=document.createEl
       updateUser(){ return ok({}); },
     },
     functions:{ invoke(n,o){ window.__INV=(window.__INV||[]).concat([o.body]); if(o.body.accion==='accesos'){ return Promise.resolve({data:{ok:true,profesionales:DB.miembros.map(m=>({user_id:m.user_id,rol:m.rol,nombre:m.nombre_profesional,email:(m.nombre_profesional||'x').split(' ')[0].toLowerCase()+'@aoi.test',ultimo:m.rol==='director'?new Date().toISOString():null,provisional:m.rol!=='director'})), pacientes:(DB.portal_accesos||[]).map(a=>({paciente_id:a.paciente_id,email:a.email,activo:a.activo!==false,ultimo:new Date(Date.now()-864e5).toISOString(),provisional:true}))},error:null}); } if(o.body.accion==='alta_profesional'){ DB.miembros.push({user_id:'u_new',consulta_id:CID,rol:o.body.rol,nombre_profesional:o.body.nombre}); save(); } return Promise.resolve({data:{ok:true,nuevo:true},error:null}); } },
-    storage:{ from(){ return { upload(){ return ok({}); }, createSignedUrl(){ return ok({signedUrl:'about:blank'}); }, remove(){ return ok(null);} }; } },
+    storage:{ from(b){ DB.objetos=DB.objetos||{}; const O=DB.objetos; return {
+      upload(path,f){ O[b+'/'+path]={name:path.split('/').pop(),created_at:new Date().toISOString()}; save(); return ok({path}); },
+      list(dir){ const pre=b+'/'+dir+'/'; return ok(Object.keys(O).filter(k=>k.startsWith(pre)&&k.slice(pre.length).indexOf('/')<0).map(k=>O[k]).sort((x,y)=>y.created_at.localeCompare(x.created_at))); },
+      createSignedUrl(){ return ok({signedUrl:'about:blank'}); },
+      remove(paths){ (paths||[]).forEach(p=>delete O[b+'/'+p]); save(); return ok(null);} }; } },
   };
   window.supabase={ createClient(){ return client; } };
 })();
