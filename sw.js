@@ -2,7 +2,7 @@
 // Guarda SOLO la parte fija de la app (páginas, código e iconos) para que abra rápido y aunque el servidor
 // principal no responda (p. ej. bloqueos de IPs en días de fútbol). Nunca guarda datos clínicos:
 // las peticiones a la base de datos (otro dominio) van siempre directas a la red.
-const V = 'aoi-202610270753';
+const V = 'aoi-202610270802';
 const RESERVA = 'https://acceso.academiaonlineinsomnio.com/';
 const FIJOS = ['/lib/supabase.min.js', '/icon-192.png'];
 self.addEventListener('install', e => { self.skipWaiting(); e.waitUntil(caches.open(V).then(c => c.addAll(FIJOS)).catch(() => {})); });
