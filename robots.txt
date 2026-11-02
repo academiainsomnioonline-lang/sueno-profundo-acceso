@@ -1,0 +1,4 @@
+# Gestor clínico privado de Academia Online de Insomnio.
+# Cerrado a todos los robots: buscadores, IA y cualquier otro.
+User-agent: *
+Disallow: /
