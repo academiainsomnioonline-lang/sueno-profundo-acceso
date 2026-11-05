@@ -1,7 +1,7 @@
 // Calendario privado para Google Calendar: /calendario.ics?t=CÓDIGO
 // Reenvía la petición a la función de Supabase con la clave pública (anon), que ya es pública en la web.
-const FN = "https://unzxfeslkayfcpfhpjuq.supabase.co/functions/v1/calendario-ics";
-const ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVuenhmZXNsa2F5ZmNwZmhwanVxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIwODcyOTAsImV4cCI6MjEwNzY2MzI5MH0.LSaZeN8krcSlEYD3Ll_s2GdKrY2XS1smpUv7BcMzEXE";
+const FN = "https://lkdgkzpitxupfbeceazt.supabase.co/functions/v1/calendario-ics";
+const ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxrZGdrenBpdHh1cGZiZWNlYXp0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM4NjU4NzUsImV4cCI6MjEwOTQ0MTg3NX0.6pmiW6Twub6KnmPbcumMGS-o7qcDtktizY7MwfmsHNc";
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 export default {
   async fetch(req, env) {
