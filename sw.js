@@ -2,7 +2,7 @@
 // Guarda SOLO la parte fija de la app (páginas, código e iconos) para que abra rápido y aunque el servidor
 // principal no responda (p. ej. bloqueos de IPs en días de fútbol). Nunca guarda datos clínicos:
 // las peticiones a la base de datos (otro dominio) van siempre directas a la red.
-const V = 'aoi-202611150846';
+const V = 'aoi-202611150902';
 const RESERVA = '';
 const FIJOS = ['/lib/supabase.min.js', '/icon-192.png'];
 self.addEventListener('install', e => { self.skipWaiting(); e.waitUntil(caches.open(V).then(c => c.addAll(FIJOS)).catch(() => {})); });
@@ -41,4 +41,20 @@ self.addEventListener('fetch', e => {
       return red;
     })());
   }
+});
+// Avisos en el móvil (15-nov-2026): el aviso del día y el de prueba. Al tocarlo, abre el área del paciente.
+self.addEventListener('push', e => {
+  let d = {}; try { d = e.data ? e.data.json() : {}; } catch (_) { d = { body: e.data ? e.data.text() : '' }; }
+  e.waitUntil(self.registration.showNotification(d.title || 'Sueño Profundo', {
+    body: d.body || '', icon: '/icon-192.png', badge: '/icon-192.png', tag: 'aoi-aviso', renotify: true, data: { url: d.url || '/paciente' }
+  }));
+});
+self.addEventListener('notificationclick', e => {
+  e.notification.close();
+  const url = (e.notification.data && e.notification.data.url) || '/paciente';
+  e.waitUntil((async () => {
+    const ws = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
+    for (const w of ws) { if (new URL(w.url).pathname.startsWith('/paciente')) { await w.focus(); return; } }
+    await self.clients.openWindow(url);
+  })());
 });
