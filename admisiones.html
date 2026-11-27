@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Admisiones · Academia Online de Insomnio</title>
+<script src="/lib/supabase.min.js"></script>
+<script>if(/[?&]demo=1/.test(location.search)){document.write('<script src="/demo-alta.js"><\/script>');}</script>
+<link rel="icon" href="/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400&family=Inter:wght@400;500;600;700&display=swap">
+<style>
+:root{--bg:#F7F1E3;--surface:#FFFDF8;--surface-2:#FBF6EA;--ink:#2A2824;--muted:#8A7F6A;--line:#E7DFC9;--gold:#9A7A3C;--gold-bright:#D4AF37;--ok:#3F8A66;--alert:#B2564C;--shadow:0 1px 2px rgba(42,40,36,.05),0 8px 26px rgba(42,40,36,.08);--r:16px}
+*{box-sizing:border-box}html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;-webkit-font-smoothing:antialiased;line-height:1.5;font-size:15px}
+button{font-family:inherit;cursor:pointer}
+.top{background:linear-gradient(180deg,#fff,var(--surface-2));padding:14px 18px;display:flex;align-items:center;gap:12px;border-bottom:1px solid rgba(154,122,60,.45)}
+.top img{width:40px;height:40px;border-radius:50%;box-shadow:0 0 0 1px rgba(154,122,60,.5)}
+.top .nm{font-weight:600;font-size:14.5px;line-height:1.1}.top .sb{font-family:'Cormorant Garamond',serif;font-size:14px;color:var(--gold)}
+.top .salir{margin-left:auto;background:none;border:0;color:var(--gold);font-weight:600;font-size:13px}
+.wrap{max-width:620px;margin:0 auto;padding:22px 16px 60px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:20px;margin-bottom:16px}
+h1{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:30px;margin:0 0 4px;line-height:1.15}
+h2{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:23px;margin:0 0 10px}
+.muted{color:var(--muted);font-size:13.5px}
+label.l{display:block;font-size:13px;color:var(--muted);margin:12px 0 4px;font-weight:500}
+input[type=text],input[type=email],input[type=tel],input[type=password],input[type=date],select{width:100%;padding:12px 13px;border:1px solid var(--line);border-radius:12px;font-size:16px;background:#fff;color:var(--ink);font-family:inherit}
+input:focus,select:focus{outline:2px solid var(--gold-bright);outline-offset:1px;border-color:transparent}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}@media(max-width:480px){.dos{grid-template-columns:1fr}}
+.prog{display:flex;gap:11px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:8px;background:#fff;cursor:pointer}
+.prog input{width:20px;height:20px;accent-color:#9A7A3C}.prog.on{border-color:var(--gold);background:#FBF6EA}
+.btn{display:inline-block;background:var(--ink);color:#F4ECD8;border:0;border-radius:12px;padding:13px 20px;font-size:15px;font-weight:600;text-decoration:none;text-align:center}
+.btn.gold{background:linear-gradient(180deg,var(--gold-bright),var(--gold));color:#2a2012}.btn.block{display:block;width:100%}
+.btn.ghost{background:#fff;border:1px solid var(--line);color:var(--ink)}
+.msg{font-size:13.5px;margin-top:10px;min-height:18px;font-weight:600}.msg.err{color:var(--alert)}.msg.ok{color:var(--ok)}
+.lnk{font-size:13px;color:var(--gold);cursor:pointer;background:none;border:0;padding:0;margin-top:12px;font-weight:600}
+.res dt{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-top:10px}.res dd{margin:2px 0 0;font-weight:600}
+textarea{width:100%;min-height:170px;border:1px solid var(--line);border-radius:12px;padding:12px;font:inherit;font-size:14px;background:#fff}
+.fila{display:flex;justify-content:space-between;gap:10px;border-top:1px solid var(--line);padding:10px 0;font-size:14px}.fila:first-child{border-top:0}
+.chip{font-size:12px;border-radius:999px;padding:3px 9px;background:var(--surface-2);border:1px solid var(--line);white-space:nowrap}.chip.ok{color:var(--ok);border-color:#BFDCCB}
+.files{font-size:13px;color:var(--muted);margin-top:6px}
+</style>
+</head>
+<body>
+<div class="top"><img src="/icon-192.png" alt=""><div><div class="nm">Academia Online de Insomnio</div><div class="sb">Admisiones</div></div><button class="salir" id="salir" style="display:none">Salir</button></div>
+<div class="wrap" id="app"><div class="card muted">Cargando…</div></div>
+<script>
+const SB_URL="https://lkdgkzpitxupfbeceazt.supabase.co",SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxrZGdrenBpdHh1cGZiZWNlYXp0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM4NjU4NzUsImV4cCI6MjEwOTQ0MTg3NX0.6pmiW6Twub6KnmPbcumMGS-o7qcDtktizY7MwfmsHNc";
+const sb=window.supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:true,autoRefreshToken:true,storageKey:"aoi-alta"}});
+const $=id=>document.getElementById(id),app=$("app");
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+let YO=null;
+async function fn(body){const{data,error}=await sb.functions.invoke("alta-comercial",{body});if(error){let m="";try{m=(await error.context.json()).error}catch(e){}throw new Error(m||"No se ha podido conectar. Revisa tu internet.")}return data}
+function err(el,e){el.className="msg err";el.textContent=e&&e.message||String(e)}
+
+function pantallaEntrar(){
+  $("salir").style.display="none";
+  app.innerHTML=`<div class="card"><h1>Entrar</h1><div class="muted">Acceso para el equipo comercial.</div>
+  <label class="l" for="em">Tu correo</label><input type="email" id="em" autocomplete="username">
+  <label class="l" for="pw">Contraseña</label><input type="password" id="pw" autocomplete="current-password">
+  <button class="btn gold block" id="go" style="margin-top:14px">Entrar</button><div class="msg" id="m"></div>
+  <button class="lnk" id="primera">Es la primera vez: tengo un código</button></div>`;
+  $("primera").onclick=pantallaActivar;
+  $("go").onclick=async()=>{const m=$("m");m.textContent="";const{error}=await sb.auth.signInWithPassword({email:$("em").value.trim(),password:$("pw").value});if(error)return err(m,"Correo o contraseña incorrectos.");arrancar()};
+}
+function pantallaActivar(){
+  app.innerHTML=`<div class="card"><h1>Crea tu acceso</h1><div class="muted">Con el código que te ha dado la dirección.</div>
+  <label class="l" for="em">Tu correo</label><input type="email" id="em">
+  <label class="l" for="cod">Código</label><input type="text" id="cod" style="text-transform:uppercase">
+  <label class="l" for="pw">Elige tu contraseña</label><input type="password" id="pw" autocomplete="new-password" placeholder="Mínimo 8 caracteres">
+  <label class="l" for="pw2">Repítela</label><input type="password" id="pw2" autocomplete="new-password">
+  <button class="btn gold block" id="go" style="margin-top:14px">Crear mi acceso</button><div class="msg" id="m"></div>
+  <button class="lnk" id="vol">Ya tengo contraseña</button></div>`;
+  $("vol").onclick=pantallaEntrar;
+  $("go").onclick=async()=>{const m=$("m");m.textContent="";if($("pw").value!==$("pw2").value)return err(m,"Las contraseñas no coinciden.");
+    try{await fn({accion:"activar",email:$("em").value.trim(),codigo:$("cod").value,password:$("pw").value});
+      const{error}=await sb.auth.signInWithPassword({email:$("em").value.trim(),password:$("pw").value});if(error)throw error;arrancar()}catch(e){err(m,e)}};
+}
+
+function pantallaAlta(prev){
+  const P=YO.programas,F=YO.formas,v=prev||{};
+  app.innerHTML=`<div class="card"><h1>Nueva admisión</h1><div class="muted">Hola, ${esc(YO.nombre)}. Rellena los datos del paciente después de cerrar la venta. El paciente recibirá su acceso y, al entrar, firmará el consentimiento, la protección de datos y el contrato.</div>
+  <div class="dos"><div><label class="l" for="nom">Nombre</label><input type="text" id="nom" value="${esc(v.nombre)}" autocomplete="off"></div>
+  <div><label class="l" for="ape">Apellidos</label><input type="text" id="ape" value="${esc(v.apellidos)}" autocomplete="off"></div></div>
+  <div class="dos"><div><label class="l" for="ema">Correo</label><input type="email" id="ema" value="${esc(v.email)}" autocomplete="off"></div>
+  <div><label class="l" for="tel">Teléfono (WhatsApp)</label><input type="tel" id="tel" value="${esc(v.telefono)}" autocomplete="off"></div></div>
+  <label class="l">Programa</label>${Object.keys(P).map(k=>`<label class="prog${v.programa===k?" on":""}"><input type="radio" name="prog" value="${k}"${v.programa===k?" checked":""}><span><b>${esc(P[k].nombre)}</b> · ${k} meses · ${esc(P[k].precio)}</span></label>`).join("")}
+  <div class="dos"><div><label class="l" for="fpago">Forma de pago</label><select id="fpago"><option value="">Elige…</option>${F.map(f=>`<option${v.forma_pago===f?" selected":""}>${esc(f)}</option>`).join("")}</select></div>
+  <div><label class="l" for="imp">Importe pagado</label><input type="text" id="imp" value="${esc(v.importe)}" placeholder="Ej.: 1.500 €"></div></div>
+  <label class="l" for="ini">Fecha de la primera consulta (si ya está fijada)</label><input type="date" id="ini" value="${esc(v.inicio)}">
+  <label class="l" for="just">Justificantes de pago (PDF o foto, opcional)</label><input type="file" id="just" multiple accept=".pdf,image/*"><div class="files" id="jlist"></div>
+  <button class="btn gold block" id="rev" style="margin-top:16px">Revisar y admitir</button><div class="msg" id="m"></div></div>
+  <div class="card"><h2>Tus admisiones</h2><div id="lista" class="muted">Cargando…</div></div>`;
+  if(v.files){window._files=v.files}else window._files=[];
+  const pintaF=()=>{$("jlist").textContent=window._files.length?window._files.map(f=>f.name).join(" · "):""};pintaF();
+  $("just").onchange=e=>{window._files=[...e.target.files];pintaF()};
+  document.querySelectorAll('input[name=prog]').forEach(r=>r.onchange=()=>{document.querySelectorAll(".prog").forEach(l=>l.classList.toggle("on",l.querySelector("input").checked));if(!$("imp").value)$("imp").value=P[r.value].precio});
+  $("rev").onclick=()=>{const m=$("m"),d={nombre:$("nom").value.trim(),apellidos:$("ape").value.trim(),email:$("ema").value.trim().toLowerCase(),telefono:$("tel").value.trim(),programa:(document.querySelector('input[name=prog]:checked')||{}).value||"",forma_pago:$("fpago").value,importe:$("imp").value.trim(),inicio:$("ini").value,files:window._files};
+    if(!d.nombre||!d.apellidos)return err(m,"Escribe el nombre y los apellidos.");if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(d.email))return err(m,"Revisa el correo.");if(d.telefono.replace(/\D/g,"").length<9)return err(m,"Revisa el teléfono.");if(!d.programa)return err(m,"Elige el programa.");if(!d.forma_pago)return err(m,"Elige la forma de pago.");if(!d.importe)return err(m,"Escribe el importe pagado.");pantallaRevisar(d)};
+  misAltas();
+}
+function fFecha(s){if(!s)return"";const[a,m,d]=s.slice(0,10).split("-");return`${d}/${m}/${a}`}
+function pantallaRevisar(d){
+  const P=YO.programas[d.programa];
+  app.innerHTML=`<div class="card"><h1>Revisa la admisión</h1><div class="muted">Comprueba sobre todo el correo: es con el que el paciente entrará en su área.</div>
+  <dl class="res"><dt>Paciente</dt><dd>${esc(d.nombre+" "+d.apellidos)}</dd><dt>Correo</dt><dd>${esc(d.email)}</dd><dt>Teléfono</dt><dd>${esc(d.telefono)}</dd>
+  <dt>Programa</dt><dd>${esc(P.nombre)} · ${d.programa} meses</dd><dt>Pago</dt><dd>${esc(d.importe)} · ${esc(d.forma_pago)}</dd>
+  <dt>Primera consulta</dt><dd>${d.inicio?fFecha(d.inicio):"Sin fijar todavía"}</dd><dt>Justificantes</dt><dd>${d.files.length?esc(d.files.map(f=>f.name).join(", ")):"Ninguno"}</dd></dl>
+  <div style="display:flex;gap:10px;margin-top:18px"><button class="btn ghost" id="cor" style="flex:1">Corregir</button><button class="btn gold" id="ok" style="flex:2">Confirmar admisión</button></div><div class="msg" id="m"></div></div>`;
+  $("cor").onclick=()=>pantallaAlta(d);
+  $("ok").onclick=async()=>{const b=$("ok"),m=$("m");b.disabled=true;b.textContent="Admitiendo…";
+    try{const r=await fn({accion:"alta",nombre:d.nombre,apellidos:d.apellidos,email:d.email,telefono:d.telefono,programa:d.programa,inicio:d.inicio,importe:d.importe,forma_pago:d.forma_pago});
+      const subidos=[],fallos=[];for(const f of d.files){try{if(f.size>10*1024*1024)throw new Error("pesa más de 10 MB");const b64=await new Promise((ok,ko)=>{const rd=new FileReader();rd.onload=()=>ok(String(rd.result).split(",")[1]);rd.onerror=ko;rd.readAsDataURL(f)});await fn({accion:"subir",pid:r.pid,nombre:f.name,base64:b64});subidos.push(f.name)}catch(e){fallos.push(f.name)}}
+      pantallaHecho(r,d,subidos,fallos)}catch(e){b.disabled=false;b.textContent="Confirmar admisión";err(m,e)}};
+}
+function pantallaHecho(r,d,subidos,fallos){
+  const url="https://app.academiaonlineinsomnio.com/paciente?alta="+r.codigo;
+  const txt=`Hola ${r.apodo}, te damos la bienvenida a Sueño Profundo. Este es tu enlace para entrar en tu área privada: ${url}\nSolo tienes que elegir tu contraseña. Si te lo pide, tu código es ${r.codigo}. Caduca en 7 días y sirve una sola vez.\nAl entrar verás los documentos que tienes que firmar antes de tu primera consulta. Son unos minutos.`;
+  let tel=d.telefono.replace(/\D/g,"");if(tel.length===9)tel="34"+tel;
+  app.innerHTML=`<div class="card"><h1>Admisión hecha ✓</h1>
+  <dl class="res"><dt>Paciente</dt><dd>${esc(r.nombre)}</dd><dt>Programa</dt><dd>${esc(r.programa)}</dd><dt>Psicóloga asignada</dt><dd>${esc(r.psicologa||"Pendiente: la asignará la dirección")}</dd>
+  <dt>Justificantes</dt><dd>${subidos.length?esc(subidos.length+" subido"+(subidos.length>1?"s":"")):"Ninguno"}${fallos.length?` <span style="color:var(--alert)">· No se han podido subir: ${esc(fallos.join(", "))}</span>`:""}</dd></dl>
+  ${r.avisos&&r.avisos.length?`<div class="msg err">Algunos datos no se han guardado del todo (${esc(r.avisos.join(", "))}). Avisa a la dirección.</div>`:""}
+  <h2 style="margin-top:18px">Mensaje para el paciente</h2><div class="muted" style="margin-bottom:8px">Envíaselo ahora por WhatsApp. El enlace caduca en 7 días.</div>
+  <textarea id="txt">${esc(txt)}</textarea>
+  <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap"><a class="btn gold" style="flex:1" target="_blank" rel="noopener" href="https://wa.me/${tel}?text=${encodeURIComponent(txt)}">Abrir WhatsApp</a><button class="btn ghost" id="cp" style="flex:1">Copiar mensaje</button></div><div class="msg ok" id="m"></div>
+  <button class="btn block" id="otra" style="margin-top:18px">Nueva admisión</button></div>`;
+  $("cp").onclick=async()=>{try{await navigator.clipboard.writeText($("txt").value)}catch(e){$("txt").select();document.execCommand("copy")}$("m").textContent="Copiado ✓"};
+  $("otra").onclick=()=>pantallaAlta();
+}
+async function misAltas(){const el=$("lista");if(!el)return;try{const r=await fn({accion:"mis_altas"});const a=r.altas||[];
+  el.innerHTML=a.length?a.map(x=>`<div class="fila"><span><b>${esc(x.nombre)}</b><br><span class="muted">${fFecha(x.fecha)} · ${esc(x.programa)}</span></span><span>${x.firmados>=3?'<span class="chip ok">Documentos firmados</span>':x.entro?'<span class="chip">Ha entrado</span>':'<span class="chip">Sin entrar todavía</span>'}</span></div>`).join(""):"Todavía no has hecho ninguna admisión."}catch(e){el.textContent=e.message}}
+
+async function arrancar(){
+  const{data:{session}}=await sb.auth.getSession();if(!session)return pantallaEntrar();
+  try{YO=await fn({accion:"yo"})}catch(e){await sb.auth.signOut();pantallaEntrar();return err($("m"),e)}
+  $("salir").style.display="";$("salir").onclick=async()=>{await sb.auth.signOut();pantallaEntrar()};
+  pantallaAlta();
+}
+arrancar();
+</script>
+</body>
+</html>
