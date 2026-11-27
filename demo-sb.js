@@ -52,6 +52,7 @@ document.addEventListener('DOMContentLoaded',function(){ var b=document.createEl
   if(!DB || window.__RESET){ DB=seed(); }
   const save=()=>localStorage.setItem('AOI_DEMO_DB',JSON.stringify(DB));
   save();
+  DB.biblioteca=DB.biblioteca||[{id:'b1',consulta_id:CID,titulo:'Cómo usar tu área privada',descripcion:'Te lo explica el Dr. Díaz en dos minutos.',tipo:'video',storage_path:'c1/tutorial.mp4',desde_semana:1,fijado:true,orden:0,activo:true,creado_en:new Date().toISOString()},{id:'b2',consulta_id:CID,titulo:'Control de estímulos',descripcion:'Qué hacer cuando no puedes dormir.',tipo:'pdf',storage_path:'c1/estimulos.pdf',desde_semana:1,fijado:false,orden:1,activo:true,creado_en:new Date().toISOString()},{id:'b3',consulta_id:CID,titulo:'Qué hacer en una mala noche',descripcion:'Vídeo · 4 min',tipo:'video',storage_path:'c1/mala.mp4',desde_semana:2,fijado:false,orden:2,activo:true,creado_en:new Date().toISOString()}];
   window.__FAKE=DB;
   const uid=()=>DB.session&&DB.session.user.id;
   const ok=d=>Promise.resolve({data:d,error:null});
